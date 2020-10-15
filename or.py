@@ -40,11 +40,24 @@ def forward():
     # Evaluate every element of Z in sigmoid function
     Yp = Yp(Z)
 
-    print ("*** Predicted Y (Forward propagation) ***")
-    print(Yp)
+    return Yp
+
+def cost(desired_Y, predicted_Y):
+    sub = np.subtract(desired_Y.T, predicted_Y)
+    square_sub = np.square(sub)
+
+    return np.sum(square_sub) / (2 * desired_Y.size)
 
 def main():
-    forward()
+    Yp = forward()
+    print("Forward propagation: ", Yp)
+
+    c = cost(Y, Yp)
+    print("Cost", c)
+    # Now that we have calculated our cost, the objective
+    # is to reduce it using backpropagation and gradient
+    # descent.
+
 
 if __name__ == '__main__':
     main()

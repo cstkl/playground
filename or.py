@@ -58,6 +58,30 @@ def main():
     # is to reduce it using backpropagation and gradient
     # descent.
 
+    # BACKPROPAGATION
+    # PREDICTION NODE
+    #
+    # Evaluate the derivative of cost function respect to
+    # predict_Y
+    local_gradient_pn = -np.subtract(Y.T, Yp) / Y.size
+    print("local gradient predict node: ", local_gradient_pn)
+
+    # This is because the derivative of cost function by
+    # itself is 1
+    upstream_gradient_pn = 1
+    local_gradient_pn = upstream_gradient_pn * local_gradient_pn
+    print("upstream * local gradient: ", local_gradient_pn)
+
+    # Z NODE
+    # The local gradient from last node is our global
+    upstream_gradient_zn = local_gradient_pn
+    local_gradient_zn = Yp * (np.subtract(1, Yp))
+    print("local gradient Z node: ", local_gradient_zn)
+
+    local_gradient_zn = upstream_gradient_zn * local_gradient_zn
+    print("upstream * local gradient z: ", local_gradient_zn)
+
+
 
 if __name__ == '__main__':
     main()

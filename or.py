@@ -12,18 +12,18 @@ def forward(W, X, b):
     Z = np.dot(W, X.T) + b
 
     # define vector of sigmoid function
-    Yp = np.vectorize(sigmoid)
+    pY = np.vectorize(sigmoid)
 
     # Evaluate every element of Z in sigmoid function
-    Yp = Yp(Z)
+    pY = pY(Z)
 
-    return Yp
+    return pY
 
-def cost(desired_Y, predicted_Y):
-    sub = np.subtract(desired_Y.T, predicted_Y)
+def cost(Y, pY):
+    sub = np.subtract(Y.T, pY)
     square_sub = np.square(sub)
 
-    return np.sum(square_sub) / (2 * desired_Y.size)
+    return np.sum(square_sub) / (2 * Y.size)
 
 def main():
     # Random initial values for wights
@@ -40,10 +40,10 @@ def main():
     Y = np.array([0, 1, 1, 1])
     Y = np.reshape(Y, (4, 1))
 
-    Yp = forward(W, X, b)
-    print("Forward propagation: ", Yp)
+    pY = forward(W, X, b)
+    print("Forward propagation: ", pY)
 
-    c = cost(Y, Yp)
+    c = cost(Y, pY)
     print("Cost", c)
     # Now that we have calculated our cost, the objective
     # is to reduce it using backpropagation and gradient
@@ -54,7 +54,7 @@ def main():
     #
     # Evaluate the derivative of cost function respect to
     # predict_Y
-    local_gradient_pn = -np.subtract(Y.T, Yp) / Y.size
+    local_gradient_pn = -np.subtract(Y.T, pY) / Y.size
     print("local gradient predict node: ", local_gradient_pn)
 
     # This is because the derivative of cost function by
@@ -66,7 +66,7 @@ def main():
     # Z NODE
     # The local gradient from last node is our global
     upstream_gradient_zn = local_gradient_pn
-    local_gradient_zn = Yp * (np.subtract(1, Yp))
+    local_gradient_zn = pY * (np.subtract(1, pY))
     print("local gradient Z node: ", local_gradient_zn)
 
     local_gradient_zn = upstream_gradient_zn * local_gradient_zn

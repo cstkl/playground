@@ -81,7 +81,20 @@ def main():
     local_gradient_zn = upstream_gradient_zn * local_gradient_zn
     print("upstream * local gradient z: ", local_gradient_zn)
 
+    # Now we can calculate the gradient with respect to weights
+    # and bias. Z = WX + b
+    upstream_gradient_wn = local_gradient_zn
+    local_gradient_wn = X
+    local_gradient_wn = np.dot(upstream_gradient_wn, local_gradient_wn)
+    print("local gradient W: ", local_gradient_wn)
 
+    # gradiend bias
+    upstream_gradient_bn = local_gradient_zn
+    local_gradient_bn = 1
+    local_gradient_bn = upstream_gradient_bn * local_gradient_bn
+    #print("local gradient b: ", local_gradient_bn)
+    local_gradient_bn = np.sum(local_gradient_bn)
+    print("local gradient b: ", local_gradient_bn)
 
 if __name__ == '__main__':
     main()

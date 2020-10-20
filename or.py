@@ -3,9 +3,25 @@
 import numpy as np
 import math
 
-# sigmoid as a loss function
+# The lost function consist of a equation that tell us how far
+# our NN predicted output "pY" is from our desired output "Y".
+# There are different functions that can do this job, however
+# in this case I am using sigmoid.
 def sigmoid(z):
     return 1 / (1 + math.exp(-z))
+
+# In order to use batch gradient descent, we need to change a
+# little our loss function. The idea is to adapt it for all
+# samples not only for one. This adjusted function is called
+# "cost function". The cost function is helps to minimize the
+# vertical distance(Squared Error Loss) between multiple data
+# points with respect the predictor line.
+def cost(Y, pY):
+    sub = np.subtract(Y.T, pY)
+    square_sub = np.square(sub)
+
+    return np.sum(square_sub) / (2 * Y.size)
+
 
 def forward(W, X, b):
     # Calculate Z
@@ -19,11 +35,6 @@ def forward(W, X, b):
 
     return pY
 
-def cost(Y, pY):
-    sub = np.subtract(Y.T, pY)
-    square_sub = np.square(sub)
-
-    return np.sum(square_sub) / (2 * Y.size)
 
 def main():
     # Random initial values for wights

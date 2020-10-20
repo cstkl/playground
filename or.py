@@ -56,47 +56,40 @@ def main():
 
     c = cost(Y, pY)
     print("Cost", c)
+
     # Now that we have calculated our cost, the objective
     # is to reduce it using backpropagation and gradient
     # descent.
-
-    # BACKPROPAGATION
-    # PREDICTION NODE
     #
-    # Evaluate the derivative of cost function respect to
-    # predict_Y
-    local_gradient_pn = -np.subtract(Y.T, pY) / Y.size
-    print("local gradient predict node: ", local_gradient_pn)
+    # BACKPROPAGATION:
 
-    # This is because the derivative of cost function by
-    # itself is 1
-    upstream_gradient_pn = 1
-    local_gradient_pn = upstream_gradient_pn * local_gradient_pn
-    print("upstream * local gradient: ", local_gradient_pn)
+    # Cost node
+    dCost_dpY = -np.subtract(Y.T, pY) / Y.size
+    dCost_dCost = 1
+    upstream_gradient = dCost_dCost
+    local_gradient = dCost_dpY
+    dCost_dpY = upstream_gradient * local_gradient
+    print("dCost/dpY: ", dCost_dpY)
 
-    # Z NODE
-    # The local gradient from last node is our global
-    upstream_gradient_zn = local_gradient_pn
-    local_gradient_zn = pY * (np.subtract(1, pY))
-    print("local gradient Z node: ", local_gradient_zn)
+    # Z node
+    dpY_dZ = pY * (np.subtract(1, pY))
+    upstream_gradient = dCost_dpY
+    local_gradient = dpY_dZ
+    dCost_dZ = upstream_gradient * local_gradient
+    print("dCost/dZ: ", dCost_dZ)
 
-    local_gradient_zn = upstream_gradient_zn * local_gradient_zn
-    print("upstream * local gradient z: ", local_gradient_zn)
+    # Z = WX + b node
+    dZ_dW = X
+    upstream_gradient = dCost_dZ
+    local_gradient = dZ_dW
+    dCost_dW = np.dot(upstream_gradient, local_gradient)
+    print("dCost/dW: ", dCost_dW)
 
-    # Now we can calculate the gradient with respect to weights
-    # and bias. Z = WX + b
-    upstream_gradient_wn = local_gradient_zn
-    local_gradient_wn = X
-    local_gradient_wn = np.dot(upstream_gradient_wn, local_gradient_wn)
-    print("local gradient W: ", local_gradient_wn)
-
-    # gradiend bias
-    upstream_gradient_bn = local_gradient_zn
-    local_gradient_bn = 1
-    local_gradient_bn = upstream_gradient_bn * local_gradient_bn
-    #print("local gradient b: ", local_gradient_bn)
-    local_gradient_bn = np.sum(local_gradient_bn)
-    print("local gradient b: ", local_gradient_bn)
+    dZ_db = 1
+    upstream_gradient = dCost_dZ
+    local_gradient = dZ_db
+    dCost_db = np.sum(upstream_gradient * local_gradient)
+    print("dCost/db: ", dCost_db)
 
 if __name__ == '__main__':
     main()

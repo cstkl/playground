@@ -38,15 +38,14 @@ def forward(W, X, b):
 
 def main():
     # Random initial values for wights
+    alpha = 1
     W = np.array([0.1, 0.6])
     W = np.reshape(W, (1, 2))
-
     X = np.array([
             [0, 0],
             [0, 1],
             [1, 0],
             [1, 1]])
-
     b = 0
     Y = np.array([0, 1, 1, 1])
     Y = np.reshape(Y, (4, 1))
@@ -90,6 +89,18 @@ def main():
     local_gradient = dZ_db
     dCost_db = np.sum(upstream_gradient * local_gradient)
     print("dCost/db: ", dCost_db)
+
+    # Now we can update the Weights and bias
+    W = np.subtract(W, alpha * dCost_dW)
+    b = b - (alpha * dCost_db)
+    print("updated W: ", W)
+    print("updated b: ", b)
+
+    pY = forward(W, X, b)
+    print("FP 2 iteration: ", pY)
+
+    c = cost(Y, pY)
+    print("Cost 2 iteration", c)
 
 if __name__ == '__main__':
     main()

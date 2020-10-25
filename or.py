@@ -3,7 +3,7 @@
 import numpy as np
 import math
 
-# The lost function consist of a equation that tell us how far
+# The lost function consist of an equation that tell us how far
 # our NN predicted output "pY" is from our desired output "Y".
 # There are different functions that can do this job, however
 # in this case I am using sigmoid.

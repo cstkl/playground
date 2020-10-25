@@ -35,33 +35,7 @@ def forward(W, X, b):
 
     return pY
 
-
-def main():
-    # Random initial values for wights
-    alpha = 1
-    W = np.array([0.1, 0.6])
-    W = np.reshape(W, (1, 2))
-    X = np.array([
-            [0, 0],
-            [0, 1],
-            [1, 0],
-            [1, 1]])
-    b = 0
-    Y = np.array([0, 1, 1, 1])
-    Y = np.reshape(Y, (4, 1))
-
-    pY = forward(W, X, b)
-    print("Forward propagation: ", pY)
-
-    c = cost(Y, pY)
-    print("Cost", c)
-
-    # Now that we have calculated our cost, the objective
-    # is to reduce it using backpropagation and gradient
-    # descent.
-    #
-    # BACKPROPAGATION:
-
+def backPropagation(X, Y, pY):
     # Cost node
     dCost_dpY = -np.subtract(Y.T, pY) / Y.size
     dCost_dCost = 1
@@ -90,6 +64,30 @@ def main():
     dCost_db = np.sum(upstream_gradient * local_gradient)
     print("dCost/db: ", dCost_db)
 
+    return dCost_dW, dCost_db
+
+def main():
+    # Random initial values for wights
+    alpha = 1
+    W = np.array([0.1, 0.6])
+    W = np.reshape(W, (1, 2))
+    X = np.array([
+            [0, 0],
+            [0, 1],
+            [1, 0],
+            [1, 1]])
+    b = 0
+    Y = np.array([0, 1, 1, 1])
+    Y = np.reshape(Y, (4, 1))
+
+    pY = forward(W, X, b)
+    print("Forward propagation: ", pY)
+
+    c = cost(Y, pY)
+    print("Cost", c)
+
+    dCost_dW, dCost_db = backPropagation(X, Y, pY)
+
     # Now we can update the Weights and bias
     W = np.subtract(W, alpha * dCost_dW)
     b = b - (alpha * dCost_db)
@@ -101,6 +99,8 @@ def main():
 
     c = cost(Y, pY)
     print("Cost 2 iteration", c)
+
+    dCost_dW, dCost_db = backPropagation(X, Y, pY)
 
 if __name__ == '__main__':
     main()
